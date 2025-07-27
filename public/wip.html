@@ -14,11 +14,232 @@
         <section>
             <h2>This feature isn't ready yet!</h2>
             <p>Check back soon for updates.</p>
-            <a href="index.html" class="start-btn">Back to Home</a>
+            
+            <!-- AI Flashcard Generator Section -->
+            <div id="ai-section" style="margin-top: 2rem;">
+                <h3>🤖 AI Flashcard Generator</h3>
+                <p>Upload a document and let AI create flashcards for you!</p>
+                
+                <div id="upload-form-container">
+                    <form id="upload-form" enctype="multipart/form-data">
+                        <div class="file-input-wrapper">
+                            <input type="file" id="file-input" name="file" accept=".txt,.docx" required>
+                            <label for="file-input" class="start-btn file-label">Choose File</label>
+                            <span id="file-name">No file chosen</span>
+                        </div>
+                        <button type="submit" class="start-btn" id="generate-btn">Generate Flashcards</button>
+                    </form>
+                </div>
+
+                <div id="loading" style="display: none; text-align: center; margin: 1rem 0;">
+                    <p>🤖 AI is creating your flashcards...</p>
+                    <div class="loading-spinner"></div>
+                </div>
+
+                <div id="results" style="display: none;">
+                    <h3>✨ Generated Flashcards</h3>
+                    <div id="flashcards-container"></div>
+                    <div class="button-group">
+                        <a href="study.html" class="start-btn">Study These Cards</a>
+                        <button class="start-btn" id="new-upload">Upload Another</button>
+                    </div>
+                </div>
+
+                <div id="error" style="display: none; color: #e74c3c; margin: 1rem 0;">
+                    <h3>❌ Error</h3>
+                    <p id="error-message"></p>
+                    <button class="start-btn" id="retry-btn">Try Again</button>
+                </div>
+            </div>
+            
+            <a href="index.html" class="start-btn" style="margin-top: 2rem;">Back to Home</a>
         </section>
     </main>
     <footer>
         <p>CS Girlies' First Hackathon</p>
     </footer>
+
+    <script>
+        const NUXT_API_BASE = 'http://localhost:3000';
+        let generatedFlashcards = [];
+
+        // File input handling
+        const fileInput = document.getElementById('file-input');
+        const fileName = document.getElementById('file-name');
+        
+        fileInput.addEventListener('change', function() {
+            if (this.files && this.files[0]) {
+                fileName.textContent = this.files[0].name;
+                fileName.style.color = '#222';
+            } else {
+                fileName.textContent = 'No file chosen';
+                fileName.style.color = '#666';
+            }
+        });
+
+        // Form submission
+        document.getElementById('upload-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            if (!fileInput.files[0]) {
+                alert('Please select a file first!');
+                return;
+            }
+
+            showLoading();
+            
+            try {
+                const formData = new FormData();
+                formData.append('file', fileInput.files[0]);
+
+                const response = await fetch(`${NUXT_API_BASE}/api/generate-flashcards`, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.statusMessage || 'Failed to generate flashcards');
+                }
+
+                const data = await response.json();
+                generatedFlashcards = data.flashcards;
+                showResults(data.flashcards);
+                
+                // Store flashcards for study page
+                localStorage.setItem('generatedFlashcards', JSON.stringify(data.flashcards));
+                
+            } catch (error) {
+                console.error('Error:', error);
+                showError(error.message);
+            }
+        });
+
+        function showLoading() {
+            document.getElementById('upload-form-container').style.display = 'none';
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('results').style.display = 'none';
+            document.getElementById('error').style.display = 'none';
+        }
+
+        function showResults(flashcards) {
+            document.getElementById('upload-form-container').style.display = 'none';
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('results').style.display = 'block';
+            document.getElementById('error').style.display = 'none';
+
+            const container = document.getElementById('flashcards-container');
+            container.innerHTML = '';
+
+            flashcards.forEach((card, index) => {
+                const cardElement = document.createElement('div');
+                cardElement.className = 'flashcard-preview';
+                cardElement.innerHTML = `
+                    <div class="card-number">Card ${index + 1}</div>
+                    <div class="card-question"><strong>Q:</strong> ${card.question}</div>
+                    <div class="card-answer"><strong>A:</strong> ${card.answer}</div>
+                `;
+                container.appendChild(cardElement);
+            });
+        }
+
+        function showError(message) {
+            document.getElementById('upload-form-container').style.display = 'none';
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('results').style.display = 'none';
+            document.getElementById('error').style.display = 'block';
+            document.getElementById('error-message').textContent = message;
+        }
+
+        function reset() {
+            document.getElementById('upload-form-container').style.display = 'block';
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('results').style.display = 'none';
+            document.getElementById('error').style.display = 'none';
+            fileInput.value = '';
+            fileName.textContent = 'No file chosen';
+            fileName.style.color = '#666';
+        }
+
+        // Event listeners
+        document.getElementById('new-upload').addEventListener('click', reset);
+        document.getElementById('retry-btn').addEventListener('click', reset);
+    </script>
+
+    <style>
+        .file-input-wrapper {
+            margin: 1rem 0;
+            text-align: center;
+        }
+
+        .file-label {
+            margin-right: 1rem;
+        }
+
+        #file-input {
+            display: none;
+        }
+
+        #file-name {
+            font-style: italic;
+            color: #666;
+        }
+
+        .loading-spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #e66e92;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 2s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .flashcard-preview {
+            border: 2px solid #e66e92;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            background-color: #f7edfc;
+            text-align: left;
+        }
+
+        .card-number {
+            font-weight: bold;
+            color: #e66e92;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-question, .card-answer {
+            margin: 0.5rem 0;
+            line-height: 1.4;
+        }
+
+        .button-group {
+            margin-top: 1.5rem;
+            text-align: center;
+        }
+
+        .button-group .start-btn {
+            margin: 0 0.5rem;
+        }
+
+        #ai-section {
+            border: 2px dashed #e66e92;
+            border-radius: 12px;
+            padding: 1.5rem;
+            background-color: #ffd4eb;
+        }
+
+        #ai-section h3 {
+            color: #e66e92;
+            margin-top: 0;
+        }
+    </style>
 </body>
 </html>
