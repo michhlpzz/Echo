@@ -151,3 +151,29 @@ button:hover {
 .start-btn:hover {
     background: #b062b3;
 }
+
+#pomodoro button {
+    background-color: #a3d4b1;
+    margin: 0 0.5rem;
+}
+
+#pomodoro button {
+    margin-bottom: 1rem;
+    display: block;
+}
+
+body.pomodoro-bg {
+    background: linear-gradient(180deg, #678a68 25%, #967460 100%);
+}
+
+body.pomodoro-bg header {
+    background: #486349;
+}
+
+body.pomodoro-bg main {
+    background: #c1dbd1;
+}
+
+body.pomodoro-bg footer {
+    background: linear-gradient(180deg, #967460 100%, #5e4e44 50%);
+}

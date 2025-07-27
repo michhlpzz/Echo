@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Our Team</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css?family=Limelight|Quicksand&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <h1>Meet the Team!</h1>
+    </header>
+    <main>
+        <section>
+            <h2>The people who made EchoThoughts possible!</h2>
+            <p>CS Girlies taking on their first hackathon with determination and creativity!</p>
+            
+            <div class="team-container">
+                <div class="team-member">
+                    <div class="member-photo">
+                        <img src="images/esraa.png" alt="Your Photo" id="photo1">
+                    </div>
+                    <div class="member-info">
+                        <h3>Esraa</h3>
+                        <p>Built the backend API, AI flashcard generation, and frontend integration.</p>
+                        <div class="social-links">
+                            <a href="https://github.com/Sroo22o" target="_blank" class="social-btn github">
+                                <span>📊</span> GitHub
+                            </a>
+                            <a href="https://linkedin.com/in/your-profile" target="_blank" class="social-btn linkedin">
+                                <span>💼</span> LinkedIn
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="team-member">
+                    <div class="member-photo">
+                        <img src="images/sammy.png" alt="Teammate Photo" id="photo2">
+                    </div>
+                    <div class="member-info">
+                        <h3>Sammy</h3>
+                        <p>Created the beautiful design system and user interface that brings EchoThoughts to life.</p>
+                        <div class="social-links">
+                            <a href="https://github.com/michhlpzz" target="_blank" class="social-btn github">
+                                <span>📊</span> GitHub
+                            </a>
+                            <a href="https://linkedin.com/in/sammy" target="_blank" class="social-btn linkedin">
+                                <span>💼</span> LinkedIn
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-info">
+                <h3>🚀 About EchoThoughts</h3>
+                <p>A smart study platform that combines AI-powered flashcard generation with interactive learning tools. Built for students who want to study smarter, not harder!</p>
+                
+                <div class="tech-stack">
+                    <h4>Built with:</h4>
+                    <div class="tech-tags">
+                        <span class="tech-tag">Nuxt.js</span>
+                        <span class="tech-tag">OpenAI API</span>
+                        <span class="tech-tag">Vue.js</span>
+                        <span class="tech-tag">JavaScript</span>
+                        <span class="tech-tag">HTML/CSS</span>
+                    </div>
+                </div>
+            </div>
+
+            <a href="index.html" class="start-btn">Back to Home</a>
+        </section>
+    </main>
+    <footer>
+        <p>CS Girlies' First Hackathon</p>
+    </footer>
+
+    <style>
+        .team-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin: 2rem 0;
+            justify-content: center;
+        }
+
+        .team-member {
+            background: #f7edfc;
+            border-radius: 12px;
+            padding: 1.5rem;
+            max-width: 280px;
+            text-align: center;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+            border: 2px solid #e66e92;
+        }
+
+        .member-photo {
+            margin-bottom: 1rem;
+        }
+
+        .member-photo img {
+            width: 250px;
+            height: 310px;
+            border-radius: 15px;
+            border: 3px solid #e66e92;
+            object-fit: cover;
+            object-position: center top;
+        }
+
+        .member-info h3 {
+            color: #e66e92;
+            margin: 0.5rem 0;
+            font-size: 1.4rem;
+        }
+
+        .member-info p {
+            margin: 0.5rem 0;
+            line-height: 1.4;
+        }
+
+        .social-links {
+            margin-top: 1rem;
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+        }
+
+        .social-btn {
+            background: #c074cc;
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            transition: background 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .social-btn:hover {
+            background: #b062b3;
+        }
+
+        .social-btn.github {
+            background: #333;
+        }
+
+        .social-btn.github:hover {
+            background: #555;
+        }
+
+        .social-btn.linkedin {
+            background: #0077b5;
+        }
+
+        .social-btn.linkedin:hover {
+            background: #005885;
+        }
+
+        .project-info {
+            background: #ffd4eb;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border: 2px solid #e66e92;
+        }
+
+        .project-info h3 {
+            color: #e66e92;
+            margin-top: 0;
+        }
+
+        .tech-stack {
+            margin-top: 1rem;
+        }
+
+        .tech-stack h4 {
+            color: #e66e92;
+            margin-bottom: 0.5rem;
+        }
+
+        .tech-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .tech-tag {
+            background: #e66e92;
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .team-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .social-links {
+                flex-direction: column;
+            }
+        }
+    </style>
+</body>
+</html>
