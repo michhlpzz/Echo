@@ -1,0 +1,11 @@
+Machine Learning and Artificial Intelligence
+
+Machine learning is a subset of artificial intelligence that focuses on algorithms that can learn and make decisions from data. Neural networks are computational models inspired by biological neural networks. Deep learning refers to neural networks with many layers that can learn complex patterns.
+
+The process involves training a model on large datasets to recognize patterns and make predictions. Supervised learning means the algorithm learns from labeled examples. Unsupervised learning refers to finding patterns in data without labels.
+
+In 1943, the first artificial neuron was created. In 1956, the term artificial intelligence was coined. The field has evolved significantly since then.
+
+Natural language processing is the ability of computers to understand human language. Computer vision refers to the ability to interpret and understand visual information. These are key applications of machine learning.
+
+The training process involves feeding data to algorithms repeatedly until they can make accurate predictions. Validation is used to test how well the model performs on new data. Overfitting occurs when a model learns the training data too well but fails on new data.
