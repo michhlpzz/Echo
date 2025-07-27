@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pomodoro Timer</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css?family=Limelight|Quicksand&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <h1>Pomodoro Timer</h1>
+    </header>
+    <main>
+        <section id="pomodoro">
+            <h2>Stay focused, take breaks!</h2>
+            <div id="timer-display">25:00</div>
+            <button id="start-timer">Start</button>
+            <button id="reset-timer">Reset</button>
+        </section>
+    </main>
+    <footer>
+        <p>CS Girlies' First Hackathon</p>
+    </footer>
+    <script>
+        let timer;
+        let timeLeft = 25 * 60;
+        let running = false;
+
+        function updateDisplay() {
+            const minutes = String(Math.floor(timeLeft / 60)).padStart(2, '0');
+            const seconds = String(timeLeft % 60).padStart(2, '0');
+            document.getElementById('timer-display').textContent = `${minutes}:${seconds}`;
+        }
+
+        document.getElementById('start-timer').onclick = function() {
+            if (running) return;
+            running = true;
+            timer = setInterval(() => {
+                if (timeLeft > 0) {
+                    timeLeft--;
+                    updateDisplay();
+                } else {
+                    clearInterval(timer);
+                    running = false;
+                    alert("Time's up! Take a break.");
+                }
+            }, 1000);
+        };
+
+        document.getElementById('reset-timer').onclick = function() {
+            clearInterval(timer);
+            timeLeft = 25 * 60;
+            updateDisplay();
+            running = false;
+        };
+
+        updateDisplay();
+    </script>
+</body>
+</html>
