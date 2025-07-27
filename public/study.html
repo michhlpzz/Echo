@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Start Studying</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Let's Study!</h1>
+    </header>
+    <main>
+        <section>
+            <h2>Welcome to your interactive study page!</h2>
+            <p>Here you can add interactive features like flashcards, timers, or quizzes.</p>
+
+            <div id="flashcard-controls">
+                <button class="start-btn" id="load-generated">Load AI Generated Cards</button>
+                <button class="start-btn" id="load-custom">Load Custom Cards</button>
+                <button class="start-btn" id="use-sample">Use Sample Cards</button>
+            </div>
+
+            <div id="flashcard-section">
+                <h2>Flashcards</h2>
+                <div id="card-counter">Card <span id="current-card">1</span> of <span id="total-cards">1</span></div>
+                
+                <div class="flashcard" id="flashcard">
+                    <div class="front" id="flashcard-front">What is the capital of France?</div>
+                    <div class="back" id="flashcard-back">Paris</div>
+                </div>
+                
+                <div class="flashcard-controls">
+                    <button id="flip-btn" class="start-btn">Flip Card</button>
+                    <button id="prev-btn" class="start-btn">Previous</button>
+                    <button id="next-btn" class="start-btn">Next</button>
+                </div>
+            </div>
+
+            <div id="no-cards" style="display: none;">
+                <p>No flashcards available. <a href="wip.html">Generate some cards</a> or use sample cards.</p>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <p>CS Girlies' First Hackathon</p>
+        <a href="index.html" class="start-btn">Wrapping up busines?</a>
+    </footer>
+
+    <script>
+        let flashcards = [];
+        let currentCardIndex = 0;
+
+        // Sample flashcards for demo
+        const sampleFlashcards = [
+            { question: "What is the capital of France?", answer: "Paris" },
+            { question: "What is 2 + 2?", answer: "4" },
+            { question: "Who wrote Romeo and Juliet?", answer: "William Shakespeare" },
+            { question: "What is the largest planet in our solar system?", answer: "Jupiter" },
+            { question: "What year did World War II end?", answer: "1945" }
+        ];
+
+        // DOM elements
+        const flashcard = document.getElementById('flashcard');
+        const flashcardFront = document.getElementById('flashcard-front');
+        const flashcardBack = document.getElementById('flashcard-back');
+        const flipBtn = document.getElementById('flip-btn');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const currentCardSpan = document.getElementById('current-card');
+        const totalCardsSpan = document.getElementById('total-cards');
+        const loadGeneratedBtn = document.getElementById('load-generated');
+        const loadCustomBtn = document.getElementById('load-custom');
+        const useSampleBtn = document.getElementById('use-sample');
+        const noCardsDiv = document.getElementById('no-cards');
+        const flashcardSection = document.getElementById('flashcard-section');
+
+        // Event listeners
+        flipBtn.addEventListener('click', () => {
+            flashcard.classList.toggle('flipped');
+        });
+
+        prevBtn.addEventListener('click', () => {
+            if (currentCardIndex > 0) {
+                currentCardIndex--;
+                displayCard();
+            }
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (currentCardIndex < flashcards.length - 1) {
+                currentCardIndex++;
+                displayCard();
+            }
+        });
+
+        loadGeneratedBtn.addEventListener('click', () => {
+            loadGeneratedFlashcards();
+        });
+
+        loadCustomBtn.addEventListener('click', () => {
+            loadCustomFlashcards();
+        });
+
+        useSampleBtn.addEventListener('click', () => {
+            loadSampleFlashcards();
+        });
+
+        function loadCustomFlashcards() {
+            const stored = localStorage.getItem('customFlashcards');
+            if (stored) {
+                try {
+                    const parsed = JSON.parse(stored);
+                    if (parsed && parsed.length > 0) {
+                        flashcards = parsed;
+                        currentCardIndex = 0;
+                        displayFlashcards();
+                        return;
+                    }
+                } catch (e) {
+                    console.error('Error parsing custom flashcards:', e);
+                }
+            }
+            
+            alert('No custom flashcards found. Please create some first!');
+        }
+
+        function loadGeneratedFlashcards() {
+            const stored = localStorage.getItem('generatedFlashcards');
+            if (stored) {
+                try {
+                    const parsed = JSON.parse(stored);
+                    if (parsed && parsed.length > 0) {
+                        flashcards = parsed;
+                        currentCardIndex = 0;
+                        displayFlashcards();
+                        return;
+                    }
+                } catch (e) {
+                    console.error('Error parsing stored flashcards:', e);
+                }
+            }
+            
+            alert('No generated flashcards found. Please generate some first by uploading a document!');
+        }
+
+        function loadSampleFlashcards() {
+            flashcards = sampleFlashcards;
+            currentCardIndex = 0;
+            displayFlashcards();
+        }
+
+        function displayFlashcards() {
+            if (flashcards.length === 0) {
+                flashcardSection.style.display = 'none';
+                noCardsDiv.style.display = 'block';
+                return;
+            }
+
+            flashcardSection.style.display = 'block';
+            noCardsDiv.style.display = 'none';
+            displayCard();
+        }
+
+        function displayCard() {
+            if (flashcards.length === 0) return;
+
+            const card = flashcards[currentCardIndex];
+            flashcardFront.textContent = card.question;
+            flashcardBack.textContent = card.answer;
+            
+            // Reset flip state
+            flashcard.classList.remove('flipped');
+            
+            // Update counter
+            currentCardSpan.textContent = currentCardIndex + 1;
+            totalCardsSpan.textContent = flashcards.length;
+            
+            // Update button states
+            prevBtn.disabled = currentCardIndex === 0;
+            nextBtn.disabled = currentCardIndex === flashcards.length - 1;
+        }
+
+        // Check for generated flashcards on page load
+        window.addEventListener('load', () => {
+            const stored = localStorage.getItem('generatedFlashcards');
+            if (stored) {
+                try {
+                    const parsed = JSON.parse(stored);
+                    if (parsed && parsed.length > 0) {
+                        // Auto-load generated cards if available
+                        loadGeneratedBtn.style.backgroundColor = '#28a745';
+                        loadGeneratedBtn.textContent = `Load AI Generated Cards (${parsed.length} available)`;
+                    }
+                } catch (e) {
+                    console.error('Error checking stored flashcards:', e);
+                }
+            }
+        });
+    </script>
+
+    <style>
+        #flashcard-controls {
+            margin: 20px 0;
+        }
+
+        #flashcard-controls .start-btn {
+            margin: 0 10px;
+        }
+
+        #card-counter {
+            text-align: center;
+            margin: 10px 0;
+            font-weight: bold;
+            color: #ff69b4;
+        }
+
+        .flashcard-controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .flashcard-controls .start-btn {
+            padding: 10px 15px;
+        }
+
+        .flashcard-controls .start-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        #flashcard-section {
+            margin-top: 30px;
+        }
+    </style>
+</body>
+</html>
